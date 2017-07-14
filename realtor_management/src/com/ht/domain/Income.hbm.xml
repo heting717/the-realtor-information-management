@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+    
+<hibernate-mapping>
+	
+	<class name="com.ht.domain.Income" table="in_income">
+		<id name="income_id" column="income_id">
+			<generator class="native"/>
+		</id>
+		
+		<property name="income_source" column="income_source"/>
+		<property name="income_time" column="income_time"/>
+		<property name="income_money" column="income_money"/>
+		
+		
+	</class>
+	
+</hibernate-mapping>    

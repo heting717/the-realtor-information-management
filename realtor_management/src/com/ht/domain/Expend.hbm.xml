@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+    
+<hibernate-mapping>
+	
+	<class name="com.ht.domain.Expend" table="out_expend">
+		<id name="expend_id" column="expend_id">
+			<generator class="native"/>
+		</id>
+		
+		<property name="expend_reason" column="expend_reason"/>
+		<property name="expend_time" column="expend_time"/>
+		<property name="expend_money" column="expend_money"/>
+		
+		
+	</class>
+	
+</hibernate-mapping>    

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+    
+<hibernate-mapping>
+	
+	<class name="com.ht.domain.Emp" table="emp">
+		<id name="emp_id" column="emp_id">
+			<generator class="native"/>
+		</id>
+		
+		<property name="emp_name" column="emp_name"/>
+		<property name="emp_brithday" column="emp_brithday"/>
+		<property name="emp_phone" column="emp_phone"/>
+		<property name="emp_address" column="emp_address"/>
+		<property name="emp_post" column="emp_post"/>
+		
+		<!-- 配置的多方 name是JavaBean属性名称  class="一方类的全路径" cloumn="外键的名称"  -->
+		<many-to-one name="dept" class="com.ht.domain.Dept" column="dept_id"/>
+	</class>
+	
+</hibernate-mapping>    

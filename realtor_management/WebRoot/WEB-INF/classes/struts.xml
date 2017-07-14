@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+
+	<!-- 设置上传文件的总大小，默认是2M  struts.multipart.maxSize=2097152 -->
+	<constant name="struts.multipart.maxSize" value="20971520"/>
+	
+	<!-- 先配置包结构 -->
+	<package name="realtor_management" extends="struts-default" namespace="/">
+		
+		<!-- 配置拦截器 -->
+		<interceptors>
+			<interceptor name="userInterceptor" class="com.ht.web.interceptor.UserInterceptor"/>
+		</interceptors>
+		
+		<!-- 配置全局的结果页面 -->
+		<global-results>
+			<result name="login" type="redirect">/login.jsp</result>
+		</global-results>
+		
+		<!-- 配置客户的Action，如果Action由Spring框架来管理，class标签上只需要编写ID值就OK -->
+		<action name="customer_*" class="customerAction" method="{1}">
+			<result name="page">/jsp/customer/list.jsp</result>
+			<result name="initAddUI">/jsp/customer/add.jsp</result>
+			<result name="save" type="redirectAction">customer_findByPage.action</result>
+			<result name="input">/jsp/error.jsp</result>
+			<result name="delete" type="redirectAction">customer_findByPage.action</result>
+			<result name="initUpdate">/jsp/customer/edit.jsp</result>
+			<result name="update" type="redirectAction">customer_findByPage.action</result>
+			<result name="findBySource">/jsp/totals/sources.jsp</result>
+			
+			<interceptor-ref name="userInterceptor"/>
+			<!-- 引入默认的拦截器 -->
+			<interceptor-ref name="defaultStack">
+				<!-- 决定上传文件的类型 -->
+				<param name="fileUpload.allowedExtensions">.jpg,.txt</param>
+			</interceptor-ref>
+		</action>
+		
+		<!-- 配置用户的模块 -->
+		<action name="user_*" class="userAction" method="{1}">
+			<result name="loginOK" type="redirect">/index.jsp</result>
+			<interceptor-ref name="userInterceptor">
+				<param name="excludeMethods">login,regist,checkCode</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"/>
+		</action>
+		<!-- 字典模块 -->
+		<action name="dict_*" class="dictAction" method="{1}">
+			<interceptor-ref name="userInterceptor"/>
+			<interceptor-ref name="defaultStack"/>
+		</action>
+		<!-- 收入模块 -->
+		<action name="income_*" class="incomeAction" method="{1}">
+			<result name="page">/jsp/money/income/list.jsp</result>
+			<result name="initAddUI">/jsp/money/income/add.jsp</result>
+			<result name="save" type="redirectAction">income_findByPage.action</result>
+			<result name="initUpdate">/jsp/money/income/edit.jsp</result>
+			<result name="update" type="redirectAction">income_findByPage.action</result>
+			<result name="delete" type="redirectAction">income_findByPage.action</result>
+		</action>
+		<!-- 支出模块 -->
+		<action name="expend_*" class="expendAction" method="{1}">
+			<result name="page">/jsp/money/expand/list.jsp</result>
+			<result name="initAddUI">/jsp/money/expand/add.jsp</result>
+			<result name="save" type="redirectAction">expand_findByPage.action</result>
+			<result name="initUpdate">/jsp/money/expand/edit.jsp</result>
+			<result name="update" type="redirectAction">expand_findByPage.action</result>
+			<result name="delete" type="redirectAction">expand_findByPage.action</result>
+		</action>
+		<!-- 工资模块 -->
+		<action name="salary_*" class="salaryAction" method="{1}">
+			<result name="page">/jsp/salary/list.jsp</result>
+			<result name="initAddUI">/jsp/salary/add.jsp</result>
+			<result name="save" type="redirectAction">salary_findByPage.action</result>
+			<result name="initUpdate">/jsp/salary/edit.jsp</result>
+			<result name="update" type="redirectAction">salary_findByPage.action</result>
+			<result name="delete" type="redirectAction">salary_findByPage.action</result>
+		</action>
+		<!-- 部门模块 -->
+		<action name="dept_*" class="deptAction" method="{1}">
+			<result name="page">/jsp/dept/list.jsp</result>
+			<result name="initAddUI">/jsp/dept/add.jsp</result>
+			<result name="save" type="redirectAction">dept_findByPage.action</result>
+			<result name="initUpdate">/jsp/dept/edit.jsp</result>
+			<result name="update" type="redirectAction">dept_findByPage.action</result>
+			<result name="delete" type="redirectAction">dept_findByPage.action</result>
+		</action>
+		<!-- 员工模块 -->
+		<action name="emp_*" class="empAction" method="{1}">
+			<result name="page">/jsp/emp/list.jsp</result>
+			<result name="initAddUI">/jsp/emp/add.jsp</result>
+			<result name="save" type="redirectAction">emp_findByPage.action</result>
+			<result name="initUpdate">/jsp/emp/edit.jsp</result>
+			<result name="update" type="redirectAction">emp_findByPage.action</result>
+			<result name="delete" type="redirectAction">emp_findByPage.action</result>
+		</action>
+		
+		
+		
+		
+		<!-- 联系人模块 -->
+		<action name="linkman_*" class="linkmanAction" method="{1}">
+			<result name="page">/jsp/linkman/list.jsp</result>
+			<interceptor-ref name="userInterceptor"/>
+			<interceptor-ref name="defaultStack"/>
+		</action>
+		
+		<!-- 客户拜访模块 -->
+		<action name="visit_*" class="visitAction" method="{1}">
+			<result name="page">/jsp/visit/list.jsp</result>
+			<result name="save" type="redirectAction">visit_findByPage.action</result>
+			<interceptor-ref name="userInterceptor"/>
+			<interceptor-ref name="defaultStack"/>
+		</action>
+		
+	</package>
+    
+</struts>
+
+
+
+
+
+
+
+
+
+
+
+
+

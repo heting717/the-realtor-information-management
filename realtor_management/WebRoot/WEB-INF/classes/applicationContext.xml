@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx.xsd">
+	
+	<!-- 开启注解的扫描 -->
+	<context:component-scan base-package="com.ht"/>
+	
+	<!-- 先配置C3P0的连接池 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="com.mysql.jdbc.Driver"/>
+		<property name="jdbcUrl" value="jdbc:mysql:///crm_01?useUnicode=true&amp;characterEncoding=UTF-8"/>
+		<property name="user" value="root"/>
+		<property name="password" value="root"/>
+	</bean>
+	
+	<!-- LocalSessionFactoryBean加载配置文件 -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<!-- 先加载连接池 -->
+		<property name="dataSource" ref="dataSource"/>
+		<!-- 加载方言，加载可选 -->
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+		
+		<!-- 引入映射的配置文件 -->
+		<property name="mappingResources">
+			<list>
+				<value>com/ht/domain/User.hbm.xml</value>
+				<value>com/ht/domain/Customer.hbm.xml</value>
+				<value>com/ht/domain/Dict.hbm.xml</value>
+				<value>com/ht/domain/Linkman.hbm.xml</value>
+				<value>com/ht/domain/Visit.hbm.xml</value>
+				<value>com/ht/domain/Income.hbm.xml</value>
+				<value>com/ht/domain/Expend.hbm.xml</value>
+				<value>com/ht/domain/Dept.hbm.xml</value>
+				<value>com/ht/domain/Emp.hbm.xml</value>
+				<value>com/ht/domain/Salary.hbm.xml</value>
+				
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 先配置平台事务管理器 -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<!-- 开启事务的注解 -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+			
+	<!-- 配置客户模块 -->
+	<bean id="customerAction" class="com.ht.web.action.CustomerAction" scope="prototype">
+		<property name="customerService" ref="customerService"/>
+	</bean>
+	
+	<bean id="customerService" class="com.ht.service.CustomerServiceImpl">
+		<property name="customerDao" ref="customerDao"/>
+	</bean>
+	
+	<bean id="customerDao" class="com.ht.dao.CustomerDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	<!-- 收入模块 -->
+	<bean id="incomeAction" class="com.ht.web.action.IncomeAction" scope="prototype">
+		<property name="incomeService" ref="incomeService"></property>
+	</bean>
+	<bean id="incomeService" class="com.ht.service.IncomeServiceImpl">
+		<property name="incomeDao" ref="incomeDao"></property>
+	</bean>
+	<bean id="incomeDao" class="com.ht.dao.IncomeDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<!-- 支出模块 -->
+	<bean id="expendAction" class="com.ht.web.action.ExpendAction" scope="prototype">
+		<property name="expendService" ref="expendService"></property>
+	</bean>
+	<bean id="expendService" class="com.ht.service.ExpendServiceImpl">
+		<property name="expendDao" ref="expendDao"></property>
+	</bean>
+	<bean id="expendDao" class="com.ht.dao.ExpendDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<!-- 配置用户的模块 -->
+	<bean id="userAction" class="com.ht.web.action.UserAction" scope="prototype">
+		<property name="userService" ref="userService"/>
+	</bean>
+	
+	<bean id="userService" class="com.ht.service.UserServiceImpl">
+		<property name="userDao" ref="userDao"/>
+	</bean>
+	
+	<bean id="userDao" class="com.ht.dao.UserDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<!-- 字典 -->
+	<bean id="dictAction" class="com.ht.web.action.DictAction" scope="prototype">
+		<property name="dictService" ref="dictService"/>
+	</bean>
+	
+	<bean id="dictService" class="com.ht.service.DictServiceImpl">
+		<property name="dictDao" ref="dictDao"/>
+	</bean>
+	
+	<bean id="dictDao" class="com.ht.dao.DictDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	<!-- 工资模块 -->
+	<bean id="salaryAction" class="com.ht.web.action.SalaryAction" scope="prototype">
+		<property name="salaryService" ref="salaryService"/>
+	</bean>
+	
+	<bean id="salaryService" class="com.ht.service.SalaryServiceImpl">
+		<property name="salaryDao" ref="salaryDao"/>
+	</bean>
+	
+	<bean id="salaryDao" class="com.ht.dao.SalaryDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	<!-- 部门模块 -->
+	<bean id="deptAction" class="com.ht.web.action.DeptAction" scope="prototype">
+		<property name="deptService" ref="deptService"/>
+	</bean>
+	
+	<bean id="deptService" class="com.ht.service.DeptServiceImpl">
+		<property name="deptDao" ref="deptDao"/>
+	</bean>
+	
+	<bean id="deptDao" class="com.ht.dao.DeptDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	<!-- 员工模块 -->
+	<bean id="empAction" class="com.ht.web.action.EmpAction" scope="prototype">
+		<property name="empService" ref="empService"/>
+	</bean>
+	
+	<bean id="empService" class="com.ht.service.EmpServiceImpl">
+		<property name="empDao" ref="empDao"/>
+	</bean>
+	
+	<bean id="empDao" class="com.ht.dao.EmpDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	
+	<!-- 配置联系人模块 -->
+	<bean id="linkmanAction" class="com.ht.web.action.LinkmanAction" scope="prototype">
+		<property name="linkmanService" ref="linkmanService"/>
+	</bean>
+	
+	<bean id="linkmanService" class="com.ht.service.LinkmanServiceImpl">
+		<property name="linkmanDao" ref="linkmanDao"/>
+	</bean>
+	
+	<bean id="linkmanDao" class="com.ht.dao.LinkmanDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+</beans>
+
+
+
+
+
+
+
+
+
+
+
+
